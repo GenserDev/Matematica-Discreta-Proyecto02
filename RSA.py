@@ -5,8 +5,7 @@
 # Descripción: Este código utiliza RSA para encriptar y desencriptar los mensajes. 
 # Referencias: 
 # GeeksforGeeks. (2023, June 30). ord() function in Python. GeeksforGeeks. https://www.geeksforgeeks.org/ord-function-python/
-# También se uso como referencia la entrega de la actividad formativa 5, usando criba e is_prime de ese trabajo. 
-
+# También se uso como referencia la entrega de la actividad formativa 5, usando criba e is_prime de ese trabajo.
 
 import random
 
@@ -52,12 +51,12 @@ def mcd(a, b):
 # Formula inverso modular e * t + n * s = mcd(e,n)
 def inverso_modular(e, n):
     t, nuevo_t = 0, 1
-    r, nuevo_r = n, e # Usamos r para representar los residuos 
+    residuo, nuevo_r = n, e # Usamos r para representar los residuos 
     while nuevo_r != 0:
-        cociente = r // nuevo_r
+        cociente = residuo // nuevo_r
         t, nuevo_t = nuevo_t, t - cociente * nuevo_t
-        r, nuevo_r = nuevo_r, r - cociente * nuevo_r
-    if r > 1:  # No hay inverso modular
+        residuo, nuevo_r = nuevo_r, residuo - cociente * nuevo_r
+    if residuo > 1:  # No hay inverso modular
         return None
     if t < 0:
         t += n
@@ -86,8 +85,8 @@ def generar_llaves(rango_inferior, rango_superior):
             return (e, n), (d, n)
     return None
 
+#Función para encriptar el mensaje usando el mensaje y la llave pública. 
 def encriptar(mensaje, llave_publica):
-
     e, n = llave_publica
 
     # Convertir mensaje a lista de números si es texto
@@ -100,6 +99,7 @@ def encriptar(mensaje, llave_publica):
     # Encriptar cada valor en la lista
     return [pow(m, e, n) for m in mensaje]
 
+#Función para desencriptar el mensaje que se encripto usando RSA con ASCII y la llave privada. 
 def desencriptar(mensaje_encriptado, llave_privada):
     d, n = llave_privada
 
