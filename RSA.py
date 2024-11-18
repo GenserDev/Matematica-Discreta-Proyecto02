@@ -28,6 +28,10 @@ def criba(n):
 def is_prime(n):
     if n < 2:
         return False
+    if n == 2:  #Agregamos esta parte debido a que dos es primo pero el código mandaba que no. 
+        return True
+    if n % 2 == 0: 
+        return False
     prime_list = criba(int(n**0.5) + 1)
     for i in prime_list:
         if n % i == 0:
