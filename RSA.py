@@ -15,20 +15,21 @@ def criba(n):
     for i in range(2, n + 1):
         if i not in not_prime:
             primes.append(i)
-            for j in range(i*i, n + 1, i):
+            for j in range(i * i, n + 1, i):
                 not_prime.add(j)
     return primes
+
 
 # Descripción: Función isPrime, test de primalidad utilizando la criba de Eratóstenes, 
 #              determinando si un entero positivo n es primo o no, código utilizados en DivisibilityFunctions para formativa. 
 def is_prime(n):
     if n < 2:
-        return False, None
+        return False
     prime_list = criba(int(n**0.5) + 1)
     for i in prime_list:
         if n % i == 0:
-            return False, i
-    return True, None
+            return False
+    return True
 
 # 1. Generar número primo en un rango, utiliza la función isPrime para los candidatos al numero primo
 def generar_primo(rango_inferior, rango_superior):
@@ -73,21 +74,14 @@ def generar_llaves(rango_inferior, rango_superior):
         
         # Generar e tal que gcd(e, phi_n) == 1
         e = random.randint(2, phi_n - 1)
-        while math.gcd(e, phi_n) != 1:
+        while mcd(e, phi_n) != 1:
             e = random.randint(2, phi_n - 1)
         
         # Generar inverso modular
         d = inverso_modular(e, phi_n)
-        if d is None:
-            continue  # Intentar con nuevos valores
-        
-        # Verificar que se cumpla e * d ≡ 1 (mod φ(n))
-        if (e * d) % phi_n != 1:
-            continue  # Intentar con nuevas claves
-
-        return (e, n), (d, n)
-
-    return None  # Si no se encuentran llaves válidas tras 100 intentos
+        if d is not None:
+            return (e, n), (d, n)
+    return None# Si no se encuentran llaves válidas tras 100 intentos
 
 # 5. Encriptar
 def encriptar(mensaje, llave_publica):
