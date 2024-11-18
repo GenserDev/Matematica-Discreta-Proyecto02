@@ -5,6 +5,7 @@
 # Descripción: Este código utiliza RSA para encriptar y desencriptar los mensajes. 
 # Referencias: 
 # GeeksforGeeks. (2023, June 30). ord() function in Python. GeeksforGeeks. https://www.geeksforgeeks.org/ord-function-python/
+# También se uso como referencia la entrega de la actividad formativa 5, usando criba e is_prime de ese trabajo. 
 
 
 import random
@@ -136,6 +137,7 @@ def pruebas():
     mensaje_desencriptado = desencriptar(mensaje_encriptado, llave_privada)
     print(f"Mensaje Desencriptado: {mensaje_desencriptado}")
     
+    #Mensaje eroro. 
     assert mensaje == mensaje_desencriptado, "Error en el proceso RSA."
     print("\nEL RSA funciono")
 
