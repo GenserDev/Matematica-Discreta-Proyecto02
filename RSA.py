@@ -8,6 +8,8 @@
 # También se uso como referencia la entrega de la actividad formativa 5, usando criba e is_prime de ese trabajo.
 
 import random
+import tkinter as tk
+from tkinter import simpledialog, messagebox
 
 # Descripción: Función Criba, criba de Eratóstenes para encontrar números primos
 #              menores o iguales a un numero positivo dado n. 
@@ -114,7 +116,7 @@ def desencriptar(mensaje_encriptado, llave_privada):
         return mensaje_desencriptado
 
 # Pruebas del sistema RSA
-def pruebas():
+# def pruebas():
     print("Las llaves que se generaron son: ")
     llaves = generar_llaves(100, 300)
     if not llaves:
@@ -141,4 +143,80 @@ def pruebas():
     assert mensaje == mensaje_desencriptado, "Error en el proceso RSA."
     print("\nEL RSA funciono")
 
-pruebas()
+# pruebas()
+
+# Interfaz gráfica
+class RSA:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Sistema RSA")
+        
+        self.llave_publica = None
+        self.llave_privada = None
+        
+        # Títulos
+        tk.Label(root, text="Generar Claves RSA", font=("Arial", 14)).pack(pady=10)
+        
+        # Botón para generar claves
+        tk.Button(root, text="Generar Claves", command=self.generar_claves).pack(pady=5)
+        
+        # Entrada de mensaje
+        tk.Label(root, text="Mensaje a encriptar:", font=("Arial", 12)).pack(pady=5)
+        self.mensaje_entry = tk.Entry(root, width=50)
+        self.mensaje_entry.pack(pady=5)
+        
+        # Botón para encriptar
+        tk.Button(root, text="Encriptar", command=self.encriptar_mensaje).pack(pady=5)
+        
+        # Botón para desencriptar
+        tk.Button(root, text="Desencriptar", command=self.desencriptar_mensaje).pack(pady=5)
+
+        # Área de salida
+        self.resultado_label = tk.Label(root, text="", font=("Arial", 12), fg="blue")
+        self.resultado_label.pack(pady=10)
+    
+    def generar_claves(self):
+        llaves = generar_llaves(100, 300)
+        if llaves:
+            self.llave_publica, self.llave_privada = llaves
+            messagebox.showinfo("Claves Generadas", f"Clave Pública: {self.llave_publica}\nClave Privada: {self.llave_privada}")
+        else:
+            messagebox.showerror("Error", "No se pudieron generar las claves.")
+    
+    def encriptar_mensaje(self):
+        if not self.llave_publica:
+            messagebox.showerror("Error", "Debe generar las claves primero.")
+            return
+        
+        mensaje = self.mensaje_entry.get()
+        if not mensaje:
+            messagebox.showerror("Error", "Debe ingresar un mensaje.")
+            return
+        
+        mensaje_encriptado = encriptar(mensaje, self.llave_publica)
+        self.resultado_label.config(text=f"Mensaje Encriptado: {mensaje_encriptado}")
+    
+    def desencriptar_mensaje(self):
+        if not self.llave_privada:
+            messagebox.showerror("Error", "Debe generar las claves primero.")
+            return
+        
+        mensaje_encriptado = self.resultado_label.cget("text").replace("Mensaje Encriptado: ", "")
+        if not mensaje_encriptado:
+            messagebox.showerror("Error", "No hay mensaje encriptado.")
+            return
+        
+        try:
+            mensaje_encriptado = eval(mensaje_encriptado)
+        except:
+            messagebox.showerror("Error", "El mensaje encriptado no es válido.")
+            return
+        
+        mensaje_desencriptado = desencriptar(mensaje_encriptado, self.llave_privada)
+        self.resultado_label.config(text=f"Mensaje Desencriptado: {mensaje_desencriptado}")
+
+# Ejecutar la aplicación
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = RSA(root)
+    root.mainloop()
